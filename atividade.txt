@@ -1,0 +1,17 @@
+## Atividade
+
+Crie um **repositório no GitHub** para armazenar seu código.
+Utilizando uma linguagem de sua escolha, desenvolva uma **API** para atender o seguinte cenário:
+
+Uma empresa dos Estados Unidos começou sua operação no Brasil, e quer fazer a gestão de seus funcionários estadunidenses. A receita de empresa é em real, porém o salário de seus funcionários está em dólar. O presidente da empresa quer um sistema **(API)** que traduza a remuneração de seus funcionários de dólar para o real **(BRL)** e ****tenha a capacidade de cadastrar, editar e deletar novos colaboradores ao sistema **(CRUD)**.
+
+Requisitos do sistema:
+
+1. A entidade funcionário deverá obrigatoriamente ter os seguintes atributos: id, name, salary **(em dólar)**, age, role e email.
+2. Desenvolva o **CRUD** (Create, Read, Update and Delete) de funcionário, através de “endpoints” na API.
+3. Criar um “endpoint” do tipo “GET” que retorna todos os dados de um ou mais funcionários, traduzindo seus salários de dólar para o real.
+
+<aside>
+⭐ **Bônus:** 
+• Obter a cotação de dólar em tempo real através de uma API pública como a **“awesomeAPI”** ao invés de deixá-lo fixo no seu código.
+• Armazenar os dados em um banco de dados de sua preferência ao invés de deixá-los na memória.
