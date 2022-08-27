@@ -1,0 +1,1 @@
+module.exports = {DB_USER: "testeApi", DB_PASSWORD: "AxuZVogAj9XSuhlW"};

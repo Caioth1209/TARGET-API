@@ -1,7 +1,6 @@
 const { mongoose } = require("mongoose");
 
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASS;
+const {DB_USER, DB_PASSWORD} = require("./DBinfo");
 
 class DBConnection{
 
@@ -10,18 +9,18 @@ class DBConnection{
     }
 
     databaseConnection(){
-        mongoose.connect(
+        this.dbConnection = mongoose.connect(
             `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.bwjpgyn.mongodb.net/?retryWrites=true&w=majority`,
             {
                 useNewUrlParser: true,
-                useUnifiedTopology: true,
+                useUnifiedTopology: true, 
             }
         )
         .then(()=>{
-            console.log("Conectou ao banco");
+            console.log("\n\nConexão estabelecida com o mongo db!");
         })
         .catch((err)=>{
-            console.log(err);
+            console.log("\nErro ao estabelecer conexão com o mongo db: " + err);
         });
     }
 }
