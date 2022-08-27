@@ -69,3 +69,5 @@
 - Deixei um arquivo na pasta "config" com o usuario e senha do banco para quem quiser testar a Api.
 - Optei por utilizar o "Axios" para poder buscar a cotação do dólar na Api "Awesome API".
 - Utilizei o framework "Express" para ajudar na construção do servidor
+- Utilizei o "nodemon" para me ajudar no desenvolvimento do projeto.
+- Utilizei o "Yup" para me ajudar no tratamento de dados na hora do cadastro e atualização de dados.
