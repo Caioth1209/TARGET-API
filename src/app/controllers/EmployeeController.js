@@ -40,7 +40,7 @@ class EmployeeController{
 
         const id = req.params.id;
 
-        await Employee.findOne({
+        Employee.findOne({
             id: id
         })
         .then(async (data) =>{
@@ -59,7 +59,7 @@ class EmployeeController{
                 return data.USDBRL.bid;
             })
 
-            data.salary = (parseInt(data.salary) * parseInt(dolarValue)).toFixed(2).toString()
+            data.salary = (data.salary * parseFloat(dolarValue)).toFixed(2);
 
             return res.status(200).json({
                 error: false,
@@ -85,7 +85,7 @@ class EmployeeController{
             return data.USDBRL.bid;
         })
 
-        await Employee.find()
+        Employee.find()
         .then((data) =>{
             if (data.length == 0) {
                 return res.status(200).json({
@@ -95,7 +95,7 @@ class EmployeeController{
             } 
 
             data.forEach((e)=>{
-                e.salary = (parseInt(e.salary) * parseInt(dolarValue)).toFixed(2).toString();
+                e.salary = (e.salary * parseFloat(dolarValue)).toFixed(2);
             })
 
             return res.status(200).json({
@@ -169,19 +169,32 @@ class EmployeeController{
 
         const {id} = req.body;
 
-        await Employee.deleteOne({id: id})
-        .then(()=>{
+        Employee.remove({id: id}, (err)=>{
+            if (err) {
+                return res.status(400).json({
+                    error: true,
+                    message: err.message
+                })
+            }
+
             return res.status(200).json({
                 error: false,
-                message: "Funcionário deletado com sucesso!",
-            }) 
-        })
-        .catch((err)=>{
-            return res.status(400).json({
-                error: true,
-                message: err.message
+                message: "Funcionário removido com sucesso!"
             })
         })
+        // await Employee.deleteOne({id: id})
+        // .then(()=>{
+        //     return res.status(200).json({
+        //         error: false,
+        //         message: "Funcionário deletado com sucesso!",
+        //     }) 
+        // })
+        // .catch((err)=>{
+        //     return res.status(400).json({
+        //         error: true,
+        //         message: err.message
+        //     })
+        // })
     }
 }
 
