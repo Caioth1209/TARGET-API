@@ -8,6 +8,8 @@ class EmployeeController{
     async create(req,res){
        
         try {
+            
+            // verifica se o funcionario existe
             let employeeExist = await Employee.find(
                 {id: req.body.id}
             ).exec();
@@ -18,7 +20,9 @@ class EmployeeController{
                     message: "Esse funcionário já existe!"
                 })
             }
+            //////////////////////////////
     
+            // validacao dos campos
             let schema = yup.object().shape({
                 id: yup.string().matches(/^\d+$/).required(),
                 name: yup.string().required(),
@@ -43,7 +47,10 @@ class EmployeeController{
                     message: "Idade inválida!"
                 });
             }
+            //////////////////////
     
+
+            // cadastro do funcionario
             const data = {id, name, salary, age, role, email};
     
             await Employee.create(data, (err)=>{
@@ -59,6 +66,8 @@ class EmployeeController{
                     message: "Funcionário cadastrado com sucesso!"
                 })
             })
+            ///////////////////////
+            
         } catch (err) {
             return res.status(400).json({
                 error: true,
@@ -71,19 +80,22 @@ class EmployeeController{
     async showById(req,res){
 
         try {
+            // pega o parametro que passou pela url
             const id = req.params.id;
 
-            Employee.findOne({
-                id: id
-            })
-            .then(async (data) =>{
-                if (data == null) {
-                    return res.status(200).json({
-                        error: false,
+            // verifica se o funcionario existe
+            await Employee.find(
+                {id: id}
+            )
+            .then(async (data)=>{
+                if (data.length==0) {
+                    return res.status(400).json({
+                        error: true,
                         message: "Esse funcionário não existe!"
                     })
-                } 
-
+                }
+    
+                // busca na api de dolar o valor atual
                 const dolarValue = await dolarApi.get("/")
                 .then((res)=>{
                     return res.data;
@@ -91,21 +103,35 @@ class EmployeeController{
                 .then((data)=>{
                     return data.USDBRL.bid;
                 })
-
+                .catch((err)=>{
+                    return res.status(400).json({
+                        error: true,
+                        message: `Erro ao buscar cotação: ${err}!`
+                    })
+                })
+                /////////////////////////
+    
+                // converte o salario do funcionario para real
                 data.salary = (data.salary * parseFloat(dolarValue)).toFixed(2);
-
+    
+    
+                // retorna o funcionario com o salario atualizado
                 return res.status(200).json({
                     error: false,
                     funcionario: data
                 })
+    
             })
-            .catch((err)=>{
+            .catch((err) =>{
+                // possível erro no banco
                 return res.status(400).json({
                     error: true,
                     message: `Erro: ${err}`
                 })
             });
-        } catch (error) {
+
+        } catch (err) {
+            // algum erro inesperado
             return res.status(400).json({
                 error: true,
                 message: `Erro ao buscar por id! ${err}`
@@ -116,6 +142,8 @@ class EmployeeController{
     async showAll(req,res){
 
         try {
+
+            // busca na api de dolar o valor atual
             const dolarValue = await dolarApi.get("/")
             .then((res)=>{
                 return res.data;
@@ -123,9 +151,19 @@ class EmployeeController{
             .then((data)=>{
                 return data.USDBRL.bid;
             })
+            .catch((err)=>{
+                return res.status(400).json({
+                    error: true,
+                    message: `Erro ao buscar cotação: ${err}!`
+                })
+            })
+            
 
+            // faz uma busca geral no banco de funcionarios
             Employee.find()
             .then((data) =>{
+
+                // checa se a lista ta vazia
                 if (data.length == 0) {
                     return res.status(200).json({
                         error: false,
@@ -133,16 +171,19 @@ class EmployeeController{
                     })
                 } 
 
+                // se nao tiver vazia, faz a conversao do salario da lista inteira
                 data.forEach((e)=>{
                     e.salary = (e.salary * parseFloat(dolarValue)).toFixed(2);
                 })
 
+                // retorna todos os funcionarios
                 return res.status(200).json({
                     error: false,
                     funcionarios: data
                 })
             })
             .catch((err)=>{
+                // possível erro no banco
                 return res.status(400).json({
                     error: true,
                     message: `Erro: ${err}`
@@ -161,6 +202,8 @@ class EmployeeController{
 
         try{
 
+            // verifica se só tem o id no body da requisicao
+            // o funcionario só pode ser atualizado se passar o id e mais algum campo
             if (Object.keys(req.body).length == 1) {
                 return res.status(400).json({ 
                     error: true,
@@ -168,24 +211,31 @@ class EmployeeController{
                 });   
             }
 
+            // faz uma busca no banco de funcionarios
+            // para ver se o id realmente existe
             await Employee.find({id: req.body.id})
             .then((data) =>{
+
+                // se nao existir, retorna que o funcionario nao existe
                 if (data.length == 0) {
                     return res.status(400).json({
                         error: true,
                         message: "Erro ao tentar atualizar. Funcionário não existe!"
                     })
                 } else {
+                    // retorna o funcionario
                     return data[0];
                 }
             })
             .catch((err)=>{
+                // possivel erro no banco
                 return res.status(400).json({
                     error: true,
                     message: `Erro: ${err}`
                 })
             });
 
+            // validacao dos campos
             let schema = yup.object().shape({
                 id: yup.string().matches(/^\d+$/).required(),
                 name: yup.string(),
@@ -211,6 +261,9 @@ class EmployeeController{
                 });
             }
 
+            ///////////////////
+
+            // estrutura os campos em um objeto e atualiza
             const data = {id, name, salary, age, role, email};
 
             await Employee.findOneAndUpdate({id: id}, data)
@@ -221,6 +274,7 @@ class EmployeeController{
                 }) 
             })
             .catch((err)=>{
+                // possível erro no banco
                 return res.status(400).json({
                     error: true,
                     message: err.message
@@ -228,6 +282,7 @@ class EmployeeController{
             })
 
         } catch (err){
+            // erro inesperado
             return res.status(400).json({
                 error: true,
                 message: `Erro ao atualizar! ${err}`
@@ -242,9 +297,11 @@ class EmployeeController{
 
         try {
     
+            // verifica se o funcionario existe
             await Employee.find({id: id})
             .then(async (data) =>{
 
+                // se nao exsitir, retorna que o funcionario nao existe
                 if (data.length == 0) {
 
                     return res.status(400).json({
@@ -254,6 +311,7 @@ class EmployeeController{
 
                 } else {
             
+                    // delecao de funcionario pelo id
                     await Employee.deleteOne({id: id})
                     .then(()=>{
                         return res.status(200).json({
@@ -262,14 +320,16 @@ class EmployeeController{
                         }) 
                     })
                     .catch((err)=>{
+                        // possível erro no banco
                         return res.status(400).json({
                             error: true,
-                            message: err.message
+                            message: err
                         })
                     })
                 }
             })
             .catch((err)=>{
+                // erro inesperado
                 return res.status(400).json({
                     error: true,
                     message: `Erro: ${err}`
