@@ -23,5 +23,12 @@ routes.get("/showAll", EmployeeController.showAll);
 // rota para buscar as informacoes de um funcionario
 routes.get("/showById/:id", EmployeeController.showById);
 
+// rota para desviar o erro de pagina nao encontrada.
+routes.get("/:text", (req, res) => {
+    return res.status(404).json({
+        error: true,
+        message: "OPS! URL não existente!"
+    })
+}) 
 
 module.exports = routes;
