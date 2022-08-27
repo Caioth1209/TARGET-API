@@ -36,6 +36,13 @@ class EmployeeController{
             }
     
             const {id, name, salary, age, role, email} = req.body;
+
+            if (parseInt(age) < 18) {
+                return res.status(400).json({ 
+                    error: true,
+                    message: "Idade inválida!"
+                });
+            }
     
             const data = {id, name, salary, age, role, email};
     
@@ -151,8 +158,16 @@ class EmployeeController{
     }
 
     async update(req,res){
-       
+
         try{
+
+            if (Object.keys(req.body).length == 1) {
+                return res.status(400).json({ 
+                    error: true,
+                    message: "É necessário pelo menos um campo além do id para atualizar!"
+                });   
+            }
+
             await Employee.find({id: req.body.id})
             .then((data) =>{
                 if (data.length == 0) {
@@ -160,6 +175,8 @@ class EmployeeController{
                         error: true,
                         message: "Erro ao tentar atualizar. Funcionário não existe!"
                     })
+                } else {
+                    return data[0];
                 }
             })
             .catch((err)=>{
@@ -171,12 +188,12 @@ class EmployeeController{
 
             let schema = yup.object().shape({
                 id: yup.string().matches(/^\d+$/).required(),
-                name: yup.string().required(),
-                salary: yup.number().required(),
-                age: yup.string().matches(/^\d+$/).required(),
-                role: yup.string().required(),
-                email: yup.string().email().required(), 
-            });
+                name: yup.string(),
+                salary: yup.number().min(1),
+                age: yup.string().matches(/^\d+$/),
+                role: yup.string(),
+                email: yup.string().email(), 
+            })
 
             if (!(await schema.isValid(req.body))) {
                 return res.status(400).json({ 
@@ -186,6 +203,13 @@ class EmployeeController{
             }
 
             const {id, name, salary, age, role, email} = req.body;
+
+            if (parseInt(age) < 18) {
+                return res.status(400).json({ 
+                    error: true,
+                    message: "Idade inválida!"
+                });
+            }
 
             const data = {id, name, salary, age, role, email};
 
