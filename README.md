@@ -72,3 +72,8 @@
 - Utilizei o `Nodemon` para me ajudar no desenvolvimento do projeto.
 - Utilizei o `Yup` para me ajudar no tratamento de dados na hora do cadastro e atualização de dados.
 - Deixei a `conexão` do banco de dados `aberta` para quem quiser testar a api.
+
+<hr>
+
+`Aqui está a API funcionando em tempo real:`
+https://targetsol-api.herokuapp.com/showAll
