@@ -26,8 +26,8 @@ class EmployeeController{
             let schema = yup.object().shape({
                 id: yup.string().matches(/^\d+$/).required(),
                 name: yup.string().required(),
-                salary: yup.number().required().min(1),
-                age: yup.string().matches(/^\d+$/).required(),
+                salary: yup.number().required(),
+                age: yup.number().required(),
                 role: yup.string().required(),
                 email: yup.string().email().required(),  
             });
@@ -41,7 +41,14 @@ class EmployeeController{
     
             const {id, name, salary, age, role, email} = req.body;
 
-            if (parseInt(age) < 18) {
+            if (salary < 1) {
+                return res.status(400).json({ 
+                    error: true,
+                    message: "Salário inválido! O funcionário não vai trabalhar de graça!"
+                });
+            }
+
+            if (age < 18) {
                 return res.status(400).json({ 
                     error: true,
                     message: "Idade inválida!"
@@ -112,13 +119,12 @@ class EmployeeController{
                 /////////////////////////
     
                 // converte o salario do funcionario para real
-                data.salary = (data.salary * parseFloat(dolarValue)).toFixed(2);
-    
+                data[0].salary = (data[0].salary * parseFloat(dolarValue)).toFixed(2);
     
                 // retorna o funcionario com o salario atualizado
                 return res.status(200).json({
                     error: false,
-                    funcionario: data
+                    funcionario: data[0],
                 })
     
             })
@@ -239,8 +245,8 @@ class EmployeeController{
             let schema = yup.object().shape({
                 id: yup.string().matches(/^\d+$/).required(),
                 name: yup.string(),
-                salary: yup.number().min(1),
-                age: yup.string().matches(/^\d+$/),
+                salary: yup.number(),
+                age: yup.number(),
                 role: yup.string(),
                 email: yup.string().email(), 
             })
@@ -254,13 +260,19 @@ class EmployeeController{
 
             const {id, name, salary, age, role, email} = req.body;
 
-            if (parseInt(age) < 18) {
+            if (salary < 1) {
+                return res.status(400).json({ 
+                    error: true,
+                    message: "Salário inválido! O funcionário não vai trabalhar de graça!"
+                });
+            }
+
+            if (age < 18) {
                 return res.status(400).json({ 
                     error: true,
                     message: "Idade inválida!"
                 });
             }
-
             ///////////////////
 
             // estrutura os campos em um objeto e atualiza
@@ -294,7 +306,6 @@ class EmployeeController{
     async delete(req,res){
 
         try {
-
             const id = req.body.id;
     
             // verifica se o funcionario existe

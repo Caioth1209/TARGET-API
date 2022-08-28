@@ -31,7 +31,7 @@
 - "id" em string, mas só aceita números dentro dela como identidade.
 - "name" em string.
 - "salary" em number para facilitar a conversão para real na hora de buscar os funcionários.
-- "age" em string, mas só aceita números nela.
+- "age" em number.
 - "role" em string.
 - "email" em string.
 
@@ -41,10 +41,10 @@
 
 - O "id" será a chave para atualizar. É necessário passar o mesmo "id" de cadastro.
 - "id" em string, mas só aceita números dentro dela como identidade.
-- Não precisa enviar todos os campos. Basta escolher o id e os campos que você quer atualizar.
+- `Não precisa enviar todos os campos. Basta escolher o id e os campos que você quer atualizar`.
 - "name" em string.
 - "salary" em number para facilitar a conversão para real na hora de buscar os funcionários.
-- "age" em string, mas só aceita números nela.
+- "age" em number.
 - "role" em string.
 - "email" em string.
 
