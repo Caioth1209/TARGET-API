@@ -6,9 +6,9 @@
 
 ## Dependências:
 
+- Express
 - Axios
 - Cors
-- Express
 - Mongoose
 - Nodemon
 - Yup
@@ -72,4 +72,3 @@
 - Utilizei o `Nodemon` para me ajudar no desenvolvimento do projeto.
 - Utilizei o `Yup` para me ajudar no tratamento de dados na hora do cadastro e atualização de dados.
 - Deixei a `conexão` do banco de dados `aberta` para quem quiser testar a api.
-### Instalar todas as dependências:

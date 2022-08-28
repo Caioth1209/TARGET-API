@@ -26,7 +26,7 @@ class EmployeeController{
             let schema = yup.object().shape({
                 id: yup.string().matches(/^\d+$/).required(),
                 name: yup.string().required(),
-                salary: yup.number().required(),
+                salary: yup.number().required().min(1),
                 age: yup.string().matches(/^\d+$/).required(),
                 role: yup.string().required(),
                 email: yup.string().email().required(),  
@@ -293,9 +293,9 @@ class EmployeeController{
 
     async delete(req,res){
 
-        const {id} = req.body;
-
         try {
+
+            const id = req.body.id;
     
             // verifica se o funcionario existe
             await Employee.find({id: id})
