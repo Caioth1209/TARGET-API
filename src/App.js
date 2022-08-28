@@ -1,4 +1,4 @@
-// App -> arquivo de configuracao da api
+// App -> arquivo de configuracao da API
 
 const express = require('express');
 

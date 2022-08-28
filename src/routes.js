@@ -23,7 +23,7 @@ routes.get("/showAll", EmployeeController.showAll);
 // rota para buscar as informacoes de um funcionario
 routes.get("/showById/:id", EmployeeController.showById);
 
-// rota para desviar o erro de rota nao encontrada.
+// rota para desviar o erro de rota nao encontrada get.
 routes.get("/:text", (req, res) => {
     return res.status(404).json({
         error: true,
@@ -31,7 +31,7 @@ routes.get("/:text", (req, res) => {
     })
 }) 
 
-// rota para desviar o erro de rota nao encontrada.
+// rota para desviar o erro de rota nao encontrada get.
 routes.get("/", (req, res) => {
     return res.status(404).json({
         error: true,
@@ -39,7 +39,7 @@ routes.get("/", (req, res) => {
     })
 }) 
 
-// rota para desviar o erro de rota nao encontrada.
+// rota para desviar o erro de rota nao encontrada post.
 routes.post("/:text", (req, res) => {
     return res.status(404).json({
         error: true,
@@ -47,7 +47,7 @@ routes.post("/:text", (req, res) => {
     })
 }) 
 
-// rota para desviar o erro de rota nao encontrada.
+// rota para desviar o erro de rota nao encontrada post.
 routes.post("/", (req, res) => {
     return res.status(404).json({
         error: true,

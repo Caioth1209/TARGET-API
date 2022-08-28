@@ -2,7 +2,6 @@ const Employee = require("../models/Employee");
 const dolarApi = require("../../services/dolarApi");
 const yup = require('yup');
 
-
 class EmployeeController{
     
     async create(req,res){
